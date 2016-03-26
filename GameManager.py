@@ -1,7 +1,8 @@
-import pygame
+﻿import pygame
 from State import *
+from Global import Singleton
 
-
+@Singleton
 class GameManager():
 	def __init__(self):
 		self.is_running = True

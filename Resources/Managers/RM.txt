@@ -1,0 +1,78 @@
+#SCENES: 1
+#MAIN_SCENE
+Resources/Managers/SCENE1.txt
+#Image: 24
+ID 0
+Resources/Images/background.png
+ID 1
+Resources/Images/hblock2.png
+ID 2
+Resources/Images/hblock3.png
+ID 3
+Resources/Images/vblock2.png
+ID 4
+Resources/Images/vblock3.png
+ID 5
+Resources/Images/space_ship.png
+ID 6
+Resources/Images/Buttons/left_arrow_normal.png
+ID 7
+Resources/Images/Buttons/left_arrow_hover.png
+ID 8
+Resources/Images/Buttons/right_arrow_normal.png
+ID 9
+Resources/Images/Buttons/right_arrow_hover.png
+ID 10
+Resources/Images/Buttons/dfs_normal.png
+ID 11
+Resources/Images/Buttons/dfs_hover.png
+ID 12
+Resources/Images/Buttons/bfs_normal.png
+ID 13
+Resources/Images/Buttons/bfs_hover.png
+ID 14
+Resources/Images/Buttons/hcl_normal.png
+ID 15
+Resources/Images/Buttons/hcl_hover.png
+ID 16
+Resources/Images/Buttons/exit_normal.png
+ID 17
+Resources/Images/Buttons/exit_hover.png
+ID 18
+Resources/Images/Buttons/reset_normal.png
+ID 19
+Resources/Images/Buttons/reset_hover.png
+ID 20
+Resources/Images/Buttons/stop_normal.png
+ID 21
+Resources/Images/Buttons/stop_hover.png
+ID 22
+Resources/Images/Buttons/auto_normal.png
+ID 23
+Resources/Images/Buttons/auto_hover.png
+#Sound: 1
+ID 0
+Resources/Sounds/bg.ogg
+#INPUT: 11
+ID 0
+Resources/Inputs/input0.txt
+ID 1
+Resources/Inputs/input1.txt
+ID 2
+Resources/Inputs/input2.txt
+ID 3
+Resources/Inputs/input3.txt
+ID 4
+Resources/Inputs/input4.txt
+ID 5
+Resources/Inputs/input5.txt
+ID 6
+Resources/Inputs/input6.txt
+ID 7
+Resources/Inputs/input7.txt
+ID 8
+Resources/Inputs/input8.txt
+ID 9
+Resources/Inputs/input9.txt
+ID 10
+Resources/Inputs/input10.txt
