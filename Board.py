@@ -5,9 +5,9 @@ from Global import *
 from copy import deepcopy
 
 class Board(object):
-	def __init__(self):
-		self.state = [[0 for x in range(6)] for x in range(6)]
-		self.block_list = []
+	#def __init__(self):
+	#	self.state = [[0 for x in range(6)] for x in range(6)]
+	#	self.block_list = []
 
 	#def generate_moves(self):
 	#	result = []
@@ -42,9 +42,10 @@ class Board(object):
 	def __init__(self):
 		super(Board, self).__init__()
 		self.state = [[0 for x in range(6)] for x in range(6)]
-		self.pos = (400, 50)
 		self.block_list = []
+		self.pos = [400, 50]
 		self.movement = None
+		self.parent = None
 
 	def process(self):
 		for i in range(6):
@@ -94,6 +95,7 @@ class Board(object):
 					new_board_block = next(b for b in board.block_list if b.name is block.name)
 					new_board_block.move(step)
 					board.movement = Movement(new_board_block.name, step)
+					board.parent = self
 					board.update_block(new_board_block)
 					result.append(board)
 					pos_x -= 1
@@ -106,6 +108,7 @@ class Board(object):
 					new_board_block = next(b for b in board.block_list if b.name is block.name)
 					new_board_block.move(step)
 					board.movement = Movement(new_board_block.name, step)
+					board.parent = self
 					board.update_block(new_board_block)
 					result.append(board)
 					pos_x += 1
@@ -138,15 +141,17 @@ class Board(object):
 
 	def is_win(self):
 		block = next(x for x in self.block_list if x.name == 'x')
-		x = block.coord[0] + block.length
-		y = block.coord[1]
+		return block.coord[0] + block.length == 6
 
-		while x < 6:
-			if self.state[y][x] != ' ':
-				return False
-			x += 1
+		#x = block.coord[0] + block.length
+		#y = block.coord[1]
 
-		return True
+		#while x < 6:
+		#	if self.state[y][x] != ' ':
+		#		return False
+		#	x += 1
+
+		#return True
 
 	#get heristic score
 	def get_score(self):
@@ -172,9 +177,10 @@ class Board(object):
 		position = block.coord
 		processingBlock = block.name
 		currentTileBlock = None
-		lastBlock = ' '
+		lastBlock = '0'
 
-		for i in range(6):
+		i = 0
+		while i < 6:
 			if i == 0 and block.name == 'x':
 				i = position[0] + block.length
 
@@ -184,15 +190,17 @@ class Board(object):
 			if block.direction == Direction.HORIZONTAL:
 				currentTileBlock = self.state[position[1]][i]
 			else:
-				currentTileBlock = self.state[i][positon[0]]
+				currentTileBlock = self.state[i][position[0]]
 
-			if currentTileBlock == ' ' and currentTileBlock != lastBlock and currentTileBlock != processingBlock:
+			if currentTileBlock != ' ' and currentTileBlock != lastBlock and currentTileBlock != processingBlock:
 				count += 1
 				lastBlock = currentTileBlock
 				next_block = next(block for block in self.block_list if block.name == currentTileBlock)
 
-				if not any(block for block in blockList if block.name == next_block):
+				if not any(block for block in blockList if block.name == next_block.name):
 					blockList.append(next_block)
+
+			i += 1
 
 		return count
 

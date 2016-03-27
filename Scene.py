@@ -29,6 +29,10 @@ class Scene(State):
 		self.current_stage = 0
 		self.board = None
 		self.stage_text = Text('Monotype Corsiva', 38, bold = True, color = (200, 50, 0))
+		self.solution_text = Text('Consolas', 20, bold = True, color = (50, 140, 0))
+		self.time_text = Text('Consolas', 20, bold = True, color = (50, 140, 0))
+		self.mem_text = Text('Consolas', 20, bold = True, color = (50, 140, 0))
+		self.step_text = Text('Consolas', 20, bold = True, color = (50, 140, 0))
 
 		self.is_mouse_pressed = False
 		self.is_drag = False
@@ -53,8 +57,16 @@ class Scene(State):
 
 		# Set stage text position
 		self.stage_text.move_to(605, 5)
+		self.solution_text.move_to(50, 80)
+		self.time_text.move_to(50, 100)
+		self.mem_text.move_to(50, 140)
+		self.step_text.move_to(50, 120)
 		self.stage_text.set_text('STAGE 1')
 		self.all_object_list.add(self.stage_text)
+		self.all_object_list.add(self.solution_text)
+		self.all_object_list.add(self.time_text)
+		self.all_object_list.add(self.mem_text)
+		self.all_object_list.add(self.step_text)
 
 		# Set background music
 		pygame.mixer.stop()
@@ -168,15 +180,19 @@ class Scene(State):
 			self.change_stage()
 		elif self.current_button.type == 'RESET':
 			self.change_stage()
-		elif self.current_button.type == 'DFS':
+		elif self.current_button.type == 'DFS' or self.current_button.type == 'BFS' or self.current_button.type == 'HCL':
 			self.game_mode = Game_mode.AUTO
-			self.is_solve = AIManager.instance().solve(self.board, Algorithm.DFS)
-		elif self.current_button.type == 'BFS':
-			self.game_mode = Game_mode.AUTO
-			self.is_solve = AIManager.instance().solve(self.board, Algorithm.BFS)
-		elif self.current_button.type == 'HCL':
-			self.game_mode = Game_mode.AUTO
-			self.is_solve = AIManager.instance().solve(self.board, Algorithm.HCL)
+			start_time = pygame.time.get_ticks()
+			self.is_solve = AIManager.instance().solve(self.board, Algorithm[self.current_button.type])
+			total_time = pygame.time.get_ticks() - start_time
+
+			if self.is_solve:
+				self.solution_text.set_text('FOUND SOLUTION')
+			else:
+				self.solution_text.set_text('COULD NOT FIND SOLUTION')
+
+			self.time_text.set_text('Search time: ' + str(total_time) + 'ms')
+			self.step_text.set_text('Search nodes: ' + str(AIManager.instance().step))
 
 	def process_raycast_block(self):
 		mouse_pos = pygame.mouse.get_pos()
@@ -275,6 +291,8 @@ class Scene(State):
 
 	def change_stage(self):
 		self.board = ResourceManager.instance().board_list[self.current_stage].clone()
+		self.game_mode = Game_mode.NORMAL
+		self.is_moving = False
 		self.map_block()
 
 	def map_block(self):
