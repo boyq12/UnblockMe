@@ -13,5 +13,10 @@ class Block(object):
 		self.position = position
 		self.speed = 5
 
-	def move(self, cell_num):
-		pass
+	def move(self, step):
+		if self.direction is Direction.HORIZONTAL:
+			self.coord[0] += step
+			self.position[0] += step * 100
+		else:
+			self.coord[1] += step
+			self.position[1] += step * 100

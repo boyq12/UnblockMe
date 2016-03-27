@@ -11,6 +11,7 @@ from Block import *
 from Button import *
 from State import *
 from Text import *
+from AIManager import *
 
 class Scene(State):
 	def __init__(self, file_path):
@@ -35,6 +36,13 @@ class Scene(State):
 		self.orig_block_pos = None
 		self.current_block_margin = [0, 0]
 		self.current_block = None
+
+		self.game_mode = Game_mode.NORMAL
+		self.is_solve = False
+		self.is_moving = False
+		self.speed = 5
+		self.velocity = None
+		self.goal = None
 
 		# Load scene's resources
 		self.read_scene(file_path)
@@ -90,10 +98,35 @@ class Scene(State):
 		# Update all objects
 		self.all_object_list.update()
 
-		if self.is_drag is True:
-			self.process_drag()
+		if self.game_mode is Game_mode.NORMAL:
+			if self.is_drag is True:
+				self.process_drag()
+			else:
+				self.process_raycast_button()
 		else:
-			self.process_raycast_button()
+			if self.is_moving:
+				if self.current_block.block.direction == Direction.HORIZONTAL and self.current_block.rect.x == self.goal \
+					or self.current_block.block.direction == Direction.VERTICAL and self.current_block.rect.y == self.goal:
+					self.is_moving = False
+					self.confirm_block_pos()
+				else:
+					if self.current_block.block.direction == Direction.HORIZONTAL:
+						self.current_block.translate(self.velocity, 0)
+					else:
+						self.current_block.translate(0, self.velocity)
+			else:
+				movement = AIManager.instance().get_next_move()
+
+				if movement is not None:
+					self.current_block = next(block for block in self.block_list if block.block.name == movement.name)
+					self.goal = (self.current_block.block.position[0] if self.current_block.block.direction == Direction.HORIZONTAL \
+									else self.current_block.block.position[1]) + movement.step * 100
+					self.velocity = self.speed * sign(movement.step)
+					self.is_moving = True
+					print(movement.name + ' ' + str(movement.step) + ' ' + str(self.velocity) + ' ' + self.current_block.block.name)
+				else:
+					self.is_moving = False
+					self.game_mode = Game_mode.NORMAL
 
 	def draw(self, screen):
 		screen.fill(BLACK)
@@ -133,8 +166,17 @@ class Scene(State):
 			self.current_stage = (self.current_stage + 1) % 11
 			self.stage_text.set_text('STAGE ' + str(self.current_stage + 1))
 			self.change_stage()
-		elif self.current_button.type == "RESET":
+		elif self.current_button.type == 'RESET':
 			self.change_stage()
+		elif self.current_button.type == 'DFS':
+			self.game_mode = Game_mode.AUTO
+			self.is_solve = AIManager.instance().solve(self.board, Algorithm.DFS)
+		elif self.current_button.type == 'BFS':
+			self.game_mode = Game_mode.AUTO
+			self.is_solve = AIManager.instance().solve(self.board, Algorithm.BFS)
+		elif self.current_button.type == 'HCL':
+			self.game_mode = Game_mode.AUTO
+			self.is_solve = AIManager.instance().solve(self.board, Algorithm.HCL)
 
 	def process_raycast_block(self):
 		mouse_pos = pygame.mouse.get_pos()
@@ -179,7 +221,6 @@ class Scene(State):
 		self.current_block.block.coord[1] = int((self.current_block.block.position[1] - 50) / 100)
 		self.board.update_block(self.current_block.block)
 		self.current_block.move_to(*self.current_block.block.position)
-		print(self.current_block.block.position)
 
 	def get_block_margin(self):
 		if self.current_block.block.direction is Direction.HORIZONTAL:

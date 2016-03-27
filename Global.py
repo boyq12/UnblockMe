@@ -7,8 +7,9 @@ SCREEN_HEIGHT = 650
 
 # Enum
 Direction = Enum('Direction', 'HORIZONTAL, VERTICAL')
+Algorithm = Enum('Algorithm', 'DFS BFS HCL')
 Game_state = Enum('Game_state', 'RUNNING STOP')
-Game_mode = Enum('Game_mode', 'PvP PvAI')
+Game_mode = Enum('Game_mode', 'NORMAL AUTO')
 Team_side = Enum('Team side', 'LEFT RIGHT')
 Match_state = Enum('Match_state', 'PLAYING GOAL KICKOFF PAUSE')
 Formation = [[1, 3, 4, 3], [1, 3, 5, 2], [1, 4, 3, 3], [1, 4, 4, 2], [1, 4, 5, 1], [1, 5, 3, 2], [1, 5, 4, 1]]

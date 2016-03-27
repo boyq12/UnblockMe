@@ -32,6 +32,9 @@
     <Compile Include="GameManager.py" />
     <Compile Include="Global.py" />
     <Compile Include="home.py" />
+    <Compile Include="Movement.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Object.py" />
     <Compile Include="ResourceManager.py" />
     <Compile Include="Scene.py" />
