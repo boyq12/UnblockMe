@@ -6,6 +6,40 @@ from copy import deepcopy
 
 class Board(object):
 	def __init__(self):
+		self.state = [[0 for x in range(6)] for x in range(6)]
+		self.block_list = []
+
+	#def generate_moves(self):
+	#	result = []
+	#	board = self.clone()
+
+	#	for block in self.block_list:
+	#		if block.direction == Direction.VERTICAL:
+	#			for i in range(2):
+	#				while block.check(board, i):
+	#					new_block = next(b for b in board.block_list if b.name == block.name)
+	#					new_block.move(board, i)
+	#					new_board = board.clone()
+	#					result.append(new_board)
+
+	#				board = self.clone()
+
+	#		if block.direction == Direction.HORIZONTAL:
+	#			for i in range(2, 4):
+	#				while block.check(board, i):
+	#					new_block = next(b for b in board.block_list if b.name == block.name)
+	#					new_block.move(board, i)
+	#					new_board = board.clone()
+	#					result.append(new_board)
+
+	#				board = self.clone()
+
+	#	return result
+
+	#def equals(self, board):
+	#	return self.state == board.state
+
+	def __init__(self):
 		super(Board, self).__init__()
 		self.state = [[0 for x in range(6)] for x in range(6)]
 		self.pos = (400, 50)
@@ -29,7 +63,7 @@ class Board(object):
 							else:
 								block.direction = Direction.VERTICAL
 					else:
-						self.block_list.append(Block(self,
+						self.block_list.append(Block(
 								name = c,
 								coord = [j, i],
 								position = [self.pos[0] + j * 100, self.pos[1] + i * 100],
@@ -47,7 +81,7 @@ class Board(object):
 			for i in range(block.length):
 				self.state[block.coord[1] + i][block.coord[0]] = block_name
 
-	def generate_move(self):
+	def generate_moves(self):
 		result = []
 
 		for block in self.block_list:
@@ -102,76 +136,6 @@ class Board(object):
 
 		return result
 
-	#def getPosibleMove(self):
-	#	num_block = len(self.blocks)
-	#	result = [Board]
-	#	for i in range(num_block):
-	#		position = self.blocks[i].getPos()
-	#		length = self.blocks[i].getLength()
-	#		dir = self.blocks[i].getDir()
-	#		j = 1
-	#		if(dir == Direction.HORIZONTAL):
-	#			while ((position[1] - j) >= 0 and (self.state[position[0]][position[1] - j] == ' ')):
-	#				board = self
-	#				j+=1
-	#				board.move(board.blocks[i], dir, Move_Direction.LEFT, j)
-	#				result.append(board)
-	#			j = 1
-	#			while (position[1] + length + j - 1) < 6 and (' ' == self.state[position[0]][position[1] - +length + j - 1]):
-	#				board = self
-	#				j+=1
-	#				board.move(board.blocks[i], dir, Move_Direction.RIGHT, j)
-	#				result.append(board)
-	#		elif(dir == Direction.VERTICAL):
-	#			while ((position[0] - j) >= 0 and (self.state[position[0] - j][position[1]] == ' ')):
-	#				board = self
-	#				j+=1
-	#				board.move(board.blocks[i], dir, Move_Direction.UP,j)
-	#				result.append(board)
-	#			while (((position[0] + length + j - 1) < 6) and (self.state[position[0] + length + j - 1][position[1]] == ' ')):
-	#				board = self
-	#				j+=1
-	#				board.move(board.blocks[i], dir, Move_Direction.DOWN,j)
-	#				result.append(board)
-	#	return result
-
-
-	##move function
-	#def move(self, block, dir, move_dir, move):
-	#	row = block.getPos()[0]
-	#	col = block.getPos()[1]
-	#	index = self.blocks.index(block)
-	#	length = block.getLength()
-	#	if(dir == Direction.HORIZONTAL):
-	#		if(move_dir == Move_Direction.LEFT):
-	#			newpos = col - move
-	#			for i in range(newpos, newpos + length):
-	#				self.state[row][i] = self.blocks[index].getName()
-	#			for i in range(newpos + length, col + length):
-	#				self.state[row][i] = ' '
-	#		elif move_dir == Move_Direction.RIGHT:
-	#			newpos = col + move
-	#			for i in range(col, newpos):
-	#				self.state[row][i] = ' '
-	#			for i in range(newpos, newpos + length):
-	#				self.state[row][i] = self.blocks[index].getName()
-	#		self.blocks[index].setColPos(newpos)
-	#	elif(dir == Direction.VERTICAL):
-	#		if(move_dir == Move_Direction.UP):
-	#			newpos = row - move
-	#			for i in range(newpos, newpos + length):
-	#				self.state[i][col] = self.blocks[index].getName()
-	#			for i in range(newpos + length, row + length):
-	#				self.state[i][col] = ' '
-	#		elif(move_dir == Move_Direction.DOWN):
-	#			newpos = row + move
-	#			for i in range(row, newpos):
-	#				self.state[i][co] = ' '
-	#			for i in range(newpos, newpos + length):
-	#				self.state[i][col] = self.blocks[index].getName()
-	#		self.blocks[index].setRowPos(newpos)
-
-	#check goal:
 	def is_win(self):
 		block = next(x for x in self.block_list if x.name == 'x')
 		x = block.coord[0] + block.length
@@ -186,40 +150,50 @@ class Board(object):
 
 	#get heristic score
 	def get_score(self):
-		blockList = [Block]
-		mainBlock = self.blocks[self.getIndexBlock('x')]
+		block_list = []
+		main_block = next(x for x in self.block_list if x.name == 'x')
+
 		score = 0
 		i = 0
-		if((mainBlock.getPos()[1] + mainBlock.getLength()) == 6):
+
+		if((main_block.coord[0] + main_block.length) == 6):
 			return 1
-		blockList.append(mainBlock)
-		while(i <= (len(blockList) - 1)):
-			score -= self.countObstructure(blockList[i],blockList)
+
+		block_list.append(main_block)
+
+		while(i <= (len(block_list) - 1)):
+			score -= self.count_obstructor(block_list[i], block_list)
 			i+=1
 		return score
 
 	#count Obstructure
 	def count_obstructor(self, block, blockList):
 		count = 0
-		positon = block.getPos()
-		processingBlock = block.getName()
-		currentTileBlock = Block
-		lastBlock = '0'
+		position = block.coord
+		processingBlock = block.name
+		currentTileBlock = None
+		lastBlock = ' '
+
 		for i in range(6):
-			if i == 0 and block.getName == 'x':
-				i = positon[1] + block.getLength()
+			if i == 0 and block.name == 'x':
+				i = position[0] + block.length
+
 				if(i == 6):
 					break
-			if block.getDir() == Direction.HORIZONTAL:
-				currentTileBlock = self.state[positon[0]][i]
+
+			if block.direction == Direction.HORIZONTAL:
+				currentTileBlock = self.state[position[1]][i]
 			else:
-				currentTileBlock = self.state[positon[1]]
+				currentTileBlock = self.state[i][positon[0]]
+
 			if currentTileBlock == ' ' and currentTileBlock != lastBlock and currentTileBlock != processingBlock:
-				count+=1
+				count += 1
 				lastBlock = currentTileBlock
-				next_block = self.blocks[self.getIndexBlock(currentTileBlock)]
-				if next_block not in blockList:
+				next_block = next(block for block in self.block_list if block.name == currentTileBlock)
+
+				if not any(block for block in blockList if block.name == next_block):
 					blockList.append(next_block)
+
 		return count
 
 	def clone(self):

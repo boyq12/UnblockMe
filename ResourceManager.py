@@ -52,11 +52,26 @@ class ResourceManager():
 		board = Board()
 
 		with open(file_name) as file:
+			#symbol_list = []
+
 			for i in range(6):
 				line = file.readline()
 				for j in range(6):
 					board.state[i][j] = line[j * 2]
 
+			#		if board.state[i][j] != ' ' and board.state[i][j] not in symbol_list:
+			#			symbol_list.append(board.state[i][j])
+
+			#for k in symbol_list:
+			#	location_list = []
+				
+			#	for i in range(6):
+			#		for j in range(6):
+			#			if board.state[i][j] == k:
+			#				location_list.append(i)
+			#				location_list.append(j)
+
+			#	board.block_list.append(Block(k, location_list))
 		board.process()
 		return board
 					

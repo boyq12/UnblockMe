@@ -20,10 +20,26 @@ class AIManager(object):
 				return True
 
 			if algorithm is Algorithm.HCL:
-				pass
+				g = None
+				f = board.get_score()
+								
+				self.open.clear()
+							
+				for b in board.generate_moves():
+					g = b.get_score()
+					
+					if g > f:
+						self.open.insert(0, b)
+						break
+					
+					if g == f:
+						if not any(board for board in self.close if b.state == board.state):
+							self.open.append(b)
 			else:
-				for b in board.generate_move():
-					if not any(board for board in self.open + self.close if b.state == board.state):
+				for b in board.generate_moves():
+					exist = any(board for board in self.open if b.state == board.state) or \
+								any(board for board in self.close if b.state == board.state)
+					if not exist:
 						if algorithm is Algorithm.DFS:
 							self.open.insert(0, b)
 						else:

@@ -53,26 +53,24 @@ Resources/Images/Buttons/auto_hover.png
 #Sound: 1
 ID 0
 Resources/Sounds/bg.ogg
-#INPUT: 11
+#INPUT: 10
 ID 0
-Resources/Inputs/input0.txt
-ID 1
 Resources/Inputs/input1.txt
-ID 2
+ID 1
 Resources/Inputs/input2.txt
-ID 3
+ID 2
 Resources/Inputs/input3.txt
-ID 4
+ID 3
 Resources/Inputs/input4.txt
-ID 5
+ID 4
 Resources/Inputs/input5.txt
-ID 6
+ID 5
 Resources/Inputs/input6.txt
-ID 7
+ID 6
 Resources/Inputs/input7.txt
-ID 8
+ID 7
 Resources/Inputs/input8.txt
-ID 9
+ID 8
 Resources/Inputs/input9.txt
-ID 10
+ID 9
 Resources/Inputs/input10.txt
